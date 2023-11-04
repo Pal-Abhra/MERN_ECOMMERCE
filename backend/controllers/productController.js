@@ -4,6 +4,8 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ApiFeatures = require("../utils/apiFeatures");
 //Create Product --Admin
 exports.createProduct = catchAsyncErrors(async (req, res, next) => {
+  // req.body.user = req.user.id;
+
   const product = await Product.create(req.body);
   res.status(201).json({
     success: true,
@@ -68,11 +70,10 @@ exports.deleteProduct = catchAsyncErrors(async (req, res, next) => {
     });
   }
 
-  product = await Product.deleteOne({ id: req.params.id });
+  const deletedProduct = await Product.deleteOne({ id: req.params.id });
   //issue found
 
   res.status(200).json({
     success: true,
-    product,
   });
 });

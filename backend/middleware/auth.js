@@ -10,27 +10,13 @@ exports.isAuthenticated = catchAsyncErrors(async (req, res, next) => {
   }
 
   const decodedData = jwt.verify(token, process.env.JWT_SECRET);
-  req.user = await User.findById(decodedData._id);
+  req.user = await User.findById(decodedData.id);
 
   next();
 });
 
-// exports.authorizeRoles = async (req, res, next) => {
-//   // console.log(req.user.role);
-//   console.log(req.body);
-//   // if (req.user.role !== "admin") {
-//   //   return res
-//   //     .status(400)
-//   //     .json({ message: "Unauthorized access! Please contact to admin" });
-//   // }
-//   // next();
-// };
-
-//issue found
 exports.authorizeRoles = (...roles) => {
   return (req, res, next) => {
-    console.log(req.user);
-    //req.user is null
     if (!roles.includes(req.user.role)) {
       return next(
         new ErrorHandler(
